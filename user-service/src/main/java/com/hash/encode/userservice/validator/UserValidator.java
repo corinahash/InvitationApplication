@@ -23,8 +23,4 @@ public class UserValidator {
             throw new NoSuchElementException("Wrong phone number format!");
         }
     }
-
-    public static boolean validateUsername(String possibleUsername, String takenUsername) {
-        return !possibleUsername.equals(takenUsername);
-    }
 }

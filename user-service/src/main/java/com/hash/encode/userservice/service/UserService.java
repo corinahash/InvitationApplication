@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +22,12 @@ public class UserService {
             throw new UnsupportedOperationException("The user already exists!");
         } else {
             if (userRepository.findByUsername(user.getUsername()).isPresent()) {
-                user.setUsername(user.getFirstName() + user.getLastName());
+                String possibleUsername = user.getUsername() + new Random().nextInt(1000);
+                //assure that username is unique
+                while (userRepository.findByUsername(possibleUsername).isPresent()) {
+                    possibleUsername = user.getUsername() + new Random().nextInt(1000);
+                }
+                user.setUsername(possibleUsername);
             }
             return userRepository.save(user);
         }

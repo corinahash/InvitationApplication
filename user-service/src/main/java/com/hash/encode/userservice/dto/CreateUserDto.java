@@ -9,13 +9,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Value
 public class CreateUserDto {
-
     @NotBlank
     String email;
-
     @NotBlank
     String password;
-
     String firstName;
     String lastName;
     LocalDate birthday;
