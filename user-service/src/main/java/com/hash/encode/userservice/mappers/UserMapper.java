@@ -2,21 +2,28 @@ package com.hash.encode.userservice.mappers;
 
 import com.hash.encode.userservice.dto.CreateUserDto;
 import com.hash.encode.userservice.dto.UserDto;
+import com.hash.encode.userservice.model.Role;
 import com.hash.encode.userservice.model.User;
 import com.hash.encode.userservice.validator.UserValidator;
-import org.mindrot.jbcrypt.BCrypt;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+@RequiredArgsConstructor
 public class UserMapper {
+
+    private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public static User mapCreateUserDtoToUser(CreateUserDto dto) {
         return User.builder()
                 .email(dto.getEmail())
                 .username(getUsernameFromEmail(dto.getEmail()))
-                .password(BCrypt.hashpw(dto.getPassword(), BCrypt.gensalt()))
+                .password(passwordEncoder.encode(dto.getPassword()))
                 .firstName(dto.getFirstName())
                 .lastName(dto.getLastName())
                 .birthday(dto.getBirthday())
                 .phoneNumber(UserValidator.validatePhoneNumber(dto.getPhoneNumber()))
+                .role(Role.USER)
                 .build();
     }
 

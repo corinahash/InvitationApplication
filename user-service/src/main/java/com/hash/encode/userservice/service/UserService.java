@@ -1,10 +1,13 @@
 package com.hash.encode.userservice.service;
 
+import com.hash.encode.userservice.dto.LoginUserDto;
 import com.hash.encode.userservice.dto.UserDto;
 import com.hash.encode.userservice.model.User;
 import com.hash.encode.userservice.repository.UserRepository;
 import com.hash.encode.userservice.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -16,6 +19,7 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final AuthenticationManager authenticationManager;
 
     public User createUser(User user) {
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
@@ -31,6 +35,11 @@ public class UserService {
             }
             return userRepository.save(user);
         }
+    }
+
+    public User login(LoginUserDto user) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+        return userRepository.findByUsername(user.getUsername()).orElseThrow(() -> new NoSuchElementException("User not found!"));
     }
 
     public User getUser(int id) {
