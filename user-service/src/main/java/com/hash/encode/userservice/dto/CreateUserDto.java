@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Value
 public class CreateUserDto {
+
     @NotBlank
     String email;
     @NotBlank

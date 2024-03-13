@@ -1,5 +1,6 @@
 package com.hash.encode.userservice.mappers;
 
+import com.hash.encode.userservice.dto.ChangePasswordDto;
 import com.hash.encode.userservice.dto.CreateUserDto;
 import com.hash.encode.userservice.dto.UserDto;
 import com.hash.encode.userservice.model.Role;
@@ -23,7 +24,7 @@ public class UserMapper {
                 .lastName(dto.getLastName())
                 .birthday(dto.getBirthday())
                 .phoneNumber(UserValidator.validatePhoneNumber(dto.getPhoneNumber()))
-                .role(Role.USER)
+                .role(Role.ADMIN)
                 .build();
     }
 
@@ -36,6 +37,19 @@ public class UserMapper {
             return email.subSequence(0, email.indexOf("@")).toString();
         } else {
             throw new UnsupportedOperationException("Incorrect email!");
+        }
+    }
+
+    public static User validatePasswordAndUpdate(User user, ChangePasswordDto dto) {
+        if (passwordEncoder.matches(dto.getOldPassword(), user.getPassword())) {
+            if (dto.getNewPassword().equals(dto.getConfirmPassword())) {
+                user.setPassword(dto.getNewPassword());
+                return user;
+            } else {
+                throw new UnsupportedOperationException("The confirm password doesn't match)");
+            }
+        } else {
+            throw new UnsupportedOperationException("Wrong old password!");
         }
     }
 }

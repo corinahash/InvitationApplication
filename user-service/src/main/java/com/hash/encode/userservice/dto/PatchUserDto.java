@@ -7,12 +7,12 @@ import java.time.LocalDate;
 
 @AllArgsConstructor
 @Data
-public class UserDto {
+public class PatchUserDto {
 
-    private String email;
     private String username;
     private String firstName;
     private String lastName;
     private LocalDate birthday;
     private String phoneNumber;
+
 }

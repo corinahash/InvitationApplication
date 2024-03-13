@@ -18,8 +18,7 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    // TODO: review the 5 mins expiry period
-    private static final int ONE_MINUTE_IN_MS = 1000 * 60 * 5;
+    private static final int ONE_MINUTE_IN_MS = 1000 * 60 * 60 * 24;
 
     @Value("${jwt.secret.key}")
     private String SECRET_KEY;
@@ -58,7 +57,6 @@ public class JwtService {
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
-
     }
 
     private boolean isTokenExpired(String token) {
